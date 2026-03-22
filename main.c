@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "agenda.h"
 #include "stdlib.h"
+#include "stdbool.h"
 
 
 
@@ -19,35 +20,46 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    //cria lista
-    lista_eventos_t* lista = NULL;
-    //instancias para os dados dos eventos
-    double tempo;
-    int alvo, tipo;
-    int cont=0;
+    //array das funções 
+    bool(*array_funcao[])(evento_t*, lista_eventos_t**) = {
+        lista_eventos_adicionar_inicio,
+        lista_eventos_adicionar_fim
+    };
 
-    //percorre as linhas do arquivo
-    printf("Inserindo no início da lista...\n");
-    while (!feof(arquivo_entrada)){
-        cont++;
-        //lê linha;
-        if (fscanf(arquivo_entrada, "%lf\t%d\t%d\n", &tempo, &alvo, &tipo) != 3) {
-            printf("Erro na leitura");
-            break;
-        }
+    for (int i = 0; i < 2; i++){
+        //reinicia lista
+        lista_eventos_t* lista = NULL;
+
+        //retorna para o início do arquivo 
+        rewind(arquivo_entrada);
         
-        //cria evento
-        evento_t* evento = criar_evento(tempo, alvo, tipo);
+        //instancias para os dados dos eventos
+        double tempo;
+        int alvo, tipo;
+        int cont=0;
 
-        if (evento != NULL) lista_eventos_adicionar_inicio(evento, &lista);
+        //percorre as linhas do arquivo
+        printf("Inserindo na lista, teste: %d...\n", i+1);
+        while (!feof(arquivo_entrada)){
+            cont++;
+            //lê linha;
+            if (fscanf(arquivo_entrada, "%lf\t%d\t%d\n", &tempo, &alvo, &tipo) != 3) {
+                printf("Erro na leitura");
+                break;
+            }
+            
+            //cria evento
+            evento_t* evento = criar_evento(tempo, alvo, tipo);
+            
+            //chama a função da rodade atual: inicio, fim ou ordenado
+            if (evento != NULL) array_funcao[i](evento, &lista);
+        }
+
+        lista_eventos_listar(lista);
+        printf("Total de eventos: %d\n", cont);
+        printf("---------FIM---------\n");
     }
-
-    //libera memoria do arquivo
-    fclose(arquivo_entrada);
-
-    lista_eventos_listar(lista);
-    printf("Total de eventos: %d\n", cont);
-    printf("---------FIM---------\n");
+    
     
     return 0; 
 }
