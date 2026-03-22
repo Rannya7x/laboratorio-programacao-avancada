@@ -51,6 +51,33 @@ bool lista_eventos_adicionar_inicio(evento_t* evento, lista_eventos_t** lista) {
 
     return true;
 }
+bool lista_eventos_adicionar_fim(evento_t* evento, lista_eventos_t** lista){
+    evento_t* novo_evento = criar_evento(evento->tempo, evento->alvo, evento->tipo);
+    lista_eventos_t* nova_lista = (lista_eventos_t*)malloc(sizeof(lista_eventos_t));
+    
+    if(evento == NULL) {
+        free(novo_evento);
+        return false;
+    }
+    
+    nova_lista->evento = novo_evento;
+    nova_lista->proximo_evento = NULL;   
+
+    //lista vazia
+    if(*lista == NULL) {
+        *lista = nova_lista;
+        return true;
+    }
+    //ponteiro caminhante
+    lista_eventos_t* atual = *lista;
+    while(atual->proximo_evento != NULL) {
+        atual = atual->proximo_evento;
+    }
+
+    atual->proximo_evento = nova_lista;
+
+    return true;
+}
 
 void lista_eventos_listar(lista_eventos_t* lista){
     lista_eventos_t* atual = lista;
@@ -59,5 +86,4 @@ void lista_eventos_listar(lista_eventos_t* lista){
         printf("\n");
         atual = atual->proximo_evento;
     }
-    printf("--------------------\n");
 }
