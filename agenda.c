@@ -6,6 +6,7 @@
 //nó da árvore
 #include "agenda.h"
 #include "stdio.h"
+#include "stdbool.h"
 #include "stdlib.h"
 struct evento_t {
     double tempo;
@@ -49,4 +50,14 @@ bool lista_eventos_adicionar_inicio(evento_t* evento, lista_eventos_t** lista) {
     *lista = nova_lista;
 
     return true;
+}
+
+void lista_eventos_listar(lista_eventos_t* lista){
+    lista_eventos_t* atual = lista;
+    while (atual!=NULL){
+        printf("Evento:\n tempo=%.2f,\n alvo=%d,\n tipo=%d",atual->evento->tempo, atual->evento->alvo, atual->evento->tipo);
+        printf("\n");
+        atual = atual->proximo_evento;
+    }
+    printf("--------------------\n");
 }
