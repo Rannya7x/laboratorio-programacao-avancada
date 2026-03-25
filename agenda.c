@@ -40,16 +40,28 @@ int eventos_comparar(double tempo1, double tempo2) {
 }
 
 
-bool lista_eventos_adicionar_inicio(evento_t* evento, lista_eventos_t** lista) {
+void lista_eventos_listar(lista_eventos_t* lista){
+    lista_eventos_t* atual = lista;
+    while (atual!=NULL){
+        printf("Evento:\n tempo=%.2f,\n alvo=%d,\n tipo=%d",atual->evento->tempo, atual->evento->alvo, atual->evento->tipo);
+        printf("\n");
+        atual = atual->proximo_evento;
+    }
+}
 
+bool lista_eventos_adicionar_inicio(evento_t* evento, lista_eventos_t** lista) {
     evento_t* novo_evento = criar_evento(evento->tempo, evento->alvo, evento->tipo);
-    if (novo_evento == NULL){
+
+    if (novo_evento == NULL) {
+        return false;
+    };
+
+    lista_eventos_t* nova_lista = (lista_eventos_t*)malloc(sizeof(lista_eventos_t));
+
+    if (nova_lista == NULL) {
         free(novo_evento);
         return false;
     }
-
-    lista_eventos_t* nova_lista = (lista_eventos_t*)malloc(sizeof(lista_eventos_t));
-    if(nova_lista == NULL ) return false;
 
     nova_lista->evento = novo_evento;
     nova_lista->proximo_evento = *lista;
@@ -60,9 +72,14 @@ bool lista_eventos_adicionar_inicio(evento_t* evento, lista_eventos_t** lista) {
 }
 bool lista_eventos_adicionar_fim(evento_t* evento, lista_eventos_t** lista){
     evento_t* novo_evento = criar_evento(evento->tempo, evento->alvo, evento->tipo);
+
+    if (novo_evento == NULL) {
+        return false;
+    };
+
     lista_eventos_t* nova_lista = (lista_eventos_t*)malloc(sizeof(lista_eventos_t));
-    
-    if(evento == NULL) {
+
+    if (nova_lista == NULL) {
         free(novo_evento);
         return false;
     }
@@ -121,13 +138,4 @@ bool lista_eventos_adicionar_ordenado(evento_t* evento, lista_eventos_t** lista)
     
     return true;
 
-}
-
-void lista_eventos_listar(lista_eventos_t* lista){
-    lista_eventos_t* atual = lista;
-    while (atual!=NULL){
-        printf("Evento:\n tempo=%.2f,\n alvo=%d,\n tipo=%d",atual->evento->tempo, atual->evento->alvo, atual->evento->tipo);
-        printf("\n");
-        atual = atual->proximo_evento;
-    }
 }
