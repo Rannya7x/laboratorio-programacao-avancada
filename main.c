@@ -27,9 +27,11 @@ int main(int argc, char* argv[]) {
         lista_eventos_adicionar_ordenado
     };
 
+    //array dos nomes dos testes
     char* testes[] = {"Inicio", "Fim", "Ordenado"};
     int num_testes = sizeof(testes) / sizeof(testes[0]);
 
+    //loop para cada teste
     for (int i = 0; i < num_testes; i++){
         //reinicia lista
         lista_eventos_t* lista = NULL;
@@ -42,8 +44,9 @@ int main(int argc, char* argv[]) {
         int alvo, tipo;
         int cont=0;
 
+        printf("Inserindo %s da lista...\n", testes[i]);
+
         //percorre as linhas do arquivo
-        printf("Inserindo no %s da lista...\n", testes[i]);
         while (!feof(arquivo_entrada)){
             cont++;
             //lê linha;
