@@ -23,10 +23,14 @@ int main(int argc, char* argv[]) {
     //array das funções 
     bool(*array_funcao[])(evento_t*, lista_eventos_t**) = {
         lista_eventos_adicionar_inicio,
-        lista_eventos_adicionar_fim
+        lista_eventos_adicionar_fim,
+        lista_eventos_adicionar_ordenado
     };
 
-    for (int i = 0; i < 2; i++){
+    char* testes[] = {"Inicio", "Fim", "Ordenado"};
+    int num_testes = sizeof(testes) / sizeof(testes[0]);
+
+    for (int i = 0; i < num_testes; i++){
         //reinicia lista
         lista_eventos_t* lista = NULL;
 
@@ -39,7 +43,7 @@ int main(int argc, char* argv[]) {
         int cont=0;
 
         //percorre as linhas do arquivo
-        printf("Inserindo na lista, teste: %d...\n", i+1);
+        printf("Inserindo no %s da lista...\n", testes[i]);
         while (!feof(arquivo_entrada)){
             cont++;
             //lê linha;
